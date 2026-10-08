@@ -2,17 +2,17 @@
 import time
 Game_loop = True
 
-Level = 1
-player_health = 20
+
+
 Strange_figure_hit= 2
 Strange_figure_hit_choice = "basic hit"
 Strange_figure_health = 20
 
-scared = False
 
+scared = False
+player_health = 20
 Player_hit = 2
 Player_hit_choice = "basic hit"
-
 name = ""
 
 def start_game_settings():
@@ -30,7 +30,7 @@ def loading():
     time.sleep(0.5)
 
 def strange_figure_fight():
-    while Strange_figure_health > 0 and player_health > 0:
+    while Strange_figure_health >= 0 or player_health >= 0:
         print("The fIguRe sTarts tO cOnsUme yOur mind...")
         print("(𓁹𓂏𓁹)")
         if scared == True:
@@ -73,6 +73,7 @@ def level1():
                 Strange_figure_hit = 10
                 print("I see... you are scared", name)
                 scared = True
+                strange_figure_fight()
             
             elif scared.lower() == "no":
                 scared = False
@@ -104,6 +105,7 @@ def level1():
         #Strange tall figure fight
         time.sleep(1)
     else:
+        scared = True
         choice = input("Invalid choice. Please choose 'left' or 'right': ")
     
     return scared, Strange_figure_hit
