@@ -2,13 +2,15 @@
 import time
 Game_loop = True
 
+Level = 1
 
-
+#Small figure variables
 Strange_figure_hit= 2
 Strange_figure_hit_choice = "basic hit"
 Strange_figure_health = 20
 
 
+#Player Variables
 scared = False
 player_health = 20
 Player_hit = 2
@@ -30,19 +32,55 @@ def loading():
     time.sleep(0.5)
 
 def strange_figure_fight():
-    while Strange_figure_health >= 0 or player_health >= 0:
-        print("The fIguRe sTarts tO cOnsUme yOur mind...")
-        print("(𓁹𓂏𓁹)")
-        if scared == True:
-            print("The figure attacks you, you feel dizzy and your vision blurs...")
-            player_health -= Strange_figure_hit
+    global player_health, Strange_figure_health, scared,strange_figure_hit, Player_hit
+
+    print("The fIguRe sTarts tO cOnsUme yOur mind...")
+    print("(𓁹𓂏𓁹)")
+    print("")
+    if scared:
+        print("The figure attacks you, you feel dizzy and your vision blurs...")
+        player_health = max(0, player_health - Strange_figure_hit)
+        print("Your health is now:", player_health)
+        print("Your turn to attack...")
+        print("Choose your attack: (basic hit), (special hit), (ultimate hit),(dodge),(heal)")
+        player_hit_choice = input("Enter your choice: ")
+        if player_hit_choice.lower() == "basic hit":
+            print("player does a basic hit!")
+            Strange_figure_health = max(0, Strange_figure_health - Player_hit)
+        elif player_hit_choice.lower() == "special hit":
+            print("player does a special hit!")
+            Strange_figure_health = max(0, Strange_figure_health - (Player_hit * 2))
+        elif player_hit_choice.lower() == "ultimate hit":
+            print("player does an ultimate hit!")
+            Strange_figure_health = max(0, Strange_figure_health - (Player_hit * 3))
         else:
-            print("The figure attacks you, but you manage to dodge it...")
-            Strange_figure_health -= Player_hit
-    
+            print("You missed!")
+        print("")
+
+        if player_health == 0:
+            print("You fall before the strange figure...")
+            return False
+        if Strange_figure_health == 0:
+            print("You defeated the small strange figure!")
+            return True
+    else:
+        print("The figure attacks you, but you manage to dodge it...")
+        Strange_figure_health = max(0, Strange_figure_health - Player_hit)
+        print("The figure's health is now:", Strange_figure_health)
+        print("")
+
+    return player_health > 0
 
 
 def level1():
+    Strange_figure_hit= 2
+    Strange_figure_hit_choice = "basic hit"
+    Strange_figure_health = 20
+    #Player Variables
+    scared = False
+    player_health = 20
+    Player_hit = 2
+    Player_hit_choice = "basic hit"
     level = 1
     loading()
     print("")
@@ -72,9 +110,9 @@ def level1():
             if scared.lower() == "yes":
                 Strange_figure_hit = 10
                 print("I see... you are scared", name)
+                print("You are scared", name)
                 scared = True
-                strange_figure_fight()
-            
+
             elif scared.lower() == "no":
                 scared = False
                 print("You are brave", name)
@@ -82,11 +120,6 @@ def level1():
             #Strange small figure fight
             Strange_figure_hit = 20
             time.sleep(1)
-
-
-
-
-
 
         elif choice2.lower() == "no":
             print("You decide to stay back...")
@@ -103,18 +136,17 @@ def level1():
         print("The figure starts to move towards you...")
         print("He get's closer")
         #Strange tall figure fight
+        strange_figure_fight()
         time.sleep(1)
     else:
-        scared = True
         choice = input("Invalid choice. Please choose 'left' or 'right': ")
-    
     return scared, Strange_figure_hit
 
 
 
 while Game_loop:
     name = start_game_settings()
-    scared, Strange_figure_hit= level1()
+    scared, Strange_figure_hit = level1()
     time.sleep(1)
     print("Level 1 completed! -------------------------------------------")
     print("")
